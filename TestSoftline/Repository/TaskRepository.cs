@@ -1,45 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TestSoftline.Data;
 using TestSoftline.Models;
-using Task = TestSoftline.Models.Task;
+using Tasks = TestSoftline.Models.Tasks;
 
 namespace TestSoftline.Repository
 {
     public class TaskRepository : ITaskRepository
     {
-        private readonly ApplicationDBContext context;
+        private readonly ApplicationDBContext _context;
         public TaskRepository(ApplicationDBContext context) 
         {
-            this.context = context;
+            _context = context;
         }
-        public async System.Threading.Tasks.Task Add(Task task)
+        public async Task<Tasks> Add(Tasks task)
         {
-            await context.Tasks.AddAsync(task);
-            await context.SaveChangesAsync();
-        }
-
-        public async System.Threading.Tasks.Task Delete(int id)
-        {
-            var existingTask = await context.Tasks.FirstOrDefaultAsync(t => t.TaskId == id);
-            context.Tasks.Remove(existingTask);
-            await context.SaveChangesAsync();
+            await _context.Tasks.AddAsync(task);
+            await _context.SaveChangesAsync();
+            return task;
         }
 
-        public async Task<List<Models.Task>> Get()
+        public async Task Delete(int id)
         {
-            return await context.Tasks.Include(t => t.StatusId).ToListAsync();
+            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
+            _context.Tasks.Remove(existingTask);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<Task> Update(Task task)
+        public async Task<List<Tasks>> Get()
         {
-            var existingTask = await context.Tasks.FirstOrDefaultAsync(t => t.TaskId == task.TaskId);
+            return await _context.Tasks.Include(t => t.Statuss).ToListAsync();
+        }
+
+        public async Task<Tasks> Update(Tasks task)
+        {
+            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == task.TasksId);
             if (existingTask != null)
             {
-                return (Task)Results.BadRequest(new { message = "Invalid" });
+                return (Tasks)Results.BadRequest(new { message = "Invalid" });
             }
             existingTask = task;
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return existingTask;
         }
     }

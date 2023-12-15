@@ -1,10 +1,11 @@
 ﻿namespace TestSoftline.Models
 {
-    public class Task
+    public class Tasks
     {
-        public int TaskId { get; set; }
+        public int TasksId { get; set; }
         public string TaskName { get; set; }
         public string Description { get; set; }
-        public int StatusId { get; set; }
+
+        public List<Status> Statuss { get; set; }
     }
 }

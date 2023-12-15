@@ -1,8 +1,19 @@
-﻿@{
+﻿@model List<TestSoftline.Models.Tasks>;
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@foreach (var item in Model)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">
+                <a class="text-dark" asp-controller="Home" asp-route-id="@item.TasksId">@item.TaskName</a>
+                </h5>
+            <p class="card-text">@item.Description</p>
+            <p><span class="card-subtitle"><strong>@item.Description</strong></span></p>    
+        </div>
+    </div>    
+}
+<a asp-controller="Home" asp-action="AddTask" class="btn btn-primary">Добавить</a>
