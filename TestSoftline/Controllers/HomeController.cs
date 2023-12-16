@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 using TestSoftline.Models;
 using TestSoftline.Repository;
@@ -30,6 +31,18 @@ namespace TestSoftline.Controllers
         public async Task<IActionResult> AddTask(Tasks task)
         {
             var newTask = await taskRepository.Add(task);
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdateTask(int id)
+        { 
+            await taskRepository.Get(id);
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateTask(Tasks task)
+        {
+            await taskRepository.Update(task);
             return RedirectToAction("Index");
         }
     }

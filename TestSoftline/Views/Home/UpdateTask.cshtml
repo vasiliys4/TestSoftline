@@ -1,10 +1,10 @@
 ﻿@model TestSoftline.Models.Tasks;
 
 @{
-    ViewData["Title"] = "AddTask";
+    ViewData["Title"] = "UpdateTask";
 }
 
-<form asp-action="AddTask" asp-antiforgery="true" enctype="multipart/form-data">
+<form asp-action="UpdateTask" asp-antiforgery="true" enctype="multipart/form-data">
     <div class="form-group row">
         <div class="col-4">
             <label asp-for="TaskName">Название</label>
@@ -20,8 +20,16 @@
         <div class="col-8">
             <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
         </div>
+        <div class="col-8">
+            <select name="language">
+                @foreach (var item in Model.Statuss)
+                {
+                    <option value="@item">@item</option>
+                }
+            </select>
+        </div>
         <div class="text-right">
-            <button type="submit" class="btn btn-info">Добавить</button>
+            <button type="submit" class="btn btn-info">изменить</button>
         </div>
     </div>
 </form>

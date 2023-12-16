@@ -8,5 +8,6 @@ namespace TestSoftline.Repository
         Task<Tasks> Add(Tasks task);
         Task<Tasks> Update(Tasks task);
         Task Delete(int id);
+        Task<Tasks> Get(int id);
     }
 }

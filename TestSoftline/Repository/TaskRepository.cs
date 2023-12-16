@@ -42,5 +42,9 @@ namespace TestSoftline.Repository
             await _context.SaveChangesAsync();
             return existingTask;
         }
+        public async Task<Tasks> Get(int id)
+        {
+            return await _context.Tasks.Include(t => t.Statuss).FirstOrDefaultAsync(t => t.TasksId == id);
+        }
     }
 }
