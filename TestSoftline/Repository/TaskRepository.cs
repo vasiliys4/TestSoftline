@@ -33,18 +33,10 @@ namespace TestSoftline.Repository
 
         public async Task<Tasks> Update(Tasks task)
         {
-            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == task.TasksId);
-            if (existingTask != null)
-            {
-                return (Tasks)Results.BadRequest(new { message = "Invalid" });
-            }
-            existingTask = task;
+            _context.Tasks.Update(task);
             await _context.SaveChangesAsync();
-            return existingTask;
+            return task;
         }
-        public async Task<Tasks> Get(int id)
-        {
-            return await _context.Tasks.Include(t => t.Statuss).FirstOrDefaultAsync(t => t.TasksId == id);
-        }
+        public async Task<Tasks> Get(int id) => await _context.Tasks.Include(t => t.Statuss).FirstOrDefaultAsync(t => t.TasksId == id);
     }
 }

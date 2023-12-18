@@ -5,6 +5,7 @@
 }
 
 <form asp-action="UpdateTask" asp-antiforgery="true" enctype="multipart/form-data">
+    <input type="hidden" asp-for="@Model.TasksId"/>
     <div class="form-group row">
         <div class="col-4">
             <label asp-for="TaskName">Название</label>

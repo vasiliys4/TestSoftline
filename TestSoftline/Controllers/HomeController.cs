@@ -35,14 +35,27 @@ namespace TestSoftline.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> UpdateTask(int id)
-        { 
-            await taskRepository.Get(id);
-            return View();
+        {
+            var task = await taskRepository.Get(id);
+            return View(task);
         }
         [HttpPost]
         public async Task<IActionResult> UpdateTask(Tasks task)
-        {
+        {            
+            if (task == null)
+            {
+                return BadRequest("null");
+            }
             await taskRepository.Update(task);
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteTask(int[] ids)
+        {
+            foreach(var id in ids)
+            {
+                await taskRepository.Delete(id);
+            }
             return RedirectToAction("Index");
         }
     }
