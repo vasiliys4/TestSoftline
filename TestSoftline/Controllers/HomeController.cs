@@ -19,7 +19,7 @@ namespace TestSoftline.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var tasks = await taskRepository.Get();
+            var tasks = await taskRepository.GetAll();
             return View(tasks);
         }
         [HttpGet]
@@ -30,7 +30,7 @@ namespace TestSoftline.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTask(Tasks task)
         {
-            var newTask = await taskRepository.Add(task);
+            await taskRepository.Add(task);
             return RedirectToAction("Index");
         }
         [HttpGet]
@@ -50,12 +50,9 @@ namespace TestSoftline.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteTask(int[] ids)
+        public async Task<IActionResult> DeleteTask(int[] tasks)
         {
-            foreach(var id in ids)
-            {
-                await taskRepository.Delete(id);
-            }
+            await taskRepository.Delete(tasks);
             return RedirectToAction("Index");
         }
     }

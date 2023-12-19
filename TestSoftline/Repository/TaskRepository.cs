@@ -19,16 +19,20 @@ namespace TestSoftline.Repository
             return task;
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int[] tasks)
         {
-            var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
-            _context.Tasks.Remove(existingTask);
+            foreach (var id in tasks)
+            {
+                var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
+                _context.Tasks.Remove(existingTask);
+            }
             await _context.SaveChangesAsync();
+
         }
 
-        public async Task<List<Tasks>> Get()
+        public async Task<List<Tasks>> GetAll()
         {
-            return await _context.Tasks.Include(t => t.Statuss).ToListAsync();
+            return await _context.Tasks.Include(t => t.Status).ToListAsync();
         }
 
         public async Task<Tasks> Update(Tasks task)
@@ -37,6 +41,6 @@ namespace TestSoftline.Repository
             await _context.SaveChangesAsync();
             return task;
         }
-        public async Task<Tasks> Get(int id) => await _context.Tasks.Include(t => t.Statuss).FirstOrDefaultAsync(t => t.TasksId == id);
+        public async Task<Tasks> Get(int id) => await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
     }
 }

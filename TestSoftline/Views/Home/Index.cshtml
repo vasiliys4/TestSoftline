@@ -5,21 +5,42 @@
 }
 
 
-@foreach (var item in Model)
-{
-    <form id="form" asp-action="UpdateTask" method="get" asp-route-id="@item.TasksId">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">
-                <a class="text-dark" asp-controller="Home" asp-route-id="@item.TasksId">@item.TaskName</a>
-                </h5>
-            <p class="card-text">@item.Description</p>
-                <input name="ids" type="checkbox" value="@item.TasksId" />@item.TasksId
-        </div>
-    </div>
-        <button type ="submit">изменть</button>
-    </form>
-}
-<input type="submit" value="удалить" form="form" asp-action="DeleteTask" formmethod="post"/>
-<a asp-controller="Home" asp-action="AddTask" class="btn btn-primary">Добавить</a>
+<div class="container">
+    @using (Html.BeginForm("DeleteTask", "Home", FormMethod.Post))
+    {
+        <p>
+            <a asp-controller="Home" asp-action="AddTask" class="btn btn-primary">Добавить</a>
+            <button type="submit" class="btn btn-danger">Удалить</button>
+        </p>
+
+        foreach (var item in Model)
+        {
+            <div class="row" style="margin-bottom: 10px;">
+                <div class="card" style="padding: 0;">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-auto">
+                                <input type="checkbox" name="tasks" value="@item.TasksId" style="text-align: right;" />
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">
+                                    <a class="text-dark" asp-controller="Home" asp-route-id="@item.TasksId">@item.TaskName</a>
+                                </h5>
+                            </div>
+                            <div class="col-md-auto">
+                                <a asp-controller="Home" asp-action="UpdateTask" asp-route-id="@item.TasksId" style="text-align: right;">Изменить</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@item.Description</p>
+                    </div>
+                    <div>
+                        <p class="card-text">@item.Status</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
    

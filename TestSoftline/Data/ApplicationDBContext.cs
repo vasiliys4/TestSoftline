@@ -9,15 +9,18 @@ namespace TestSoftline.Data
         public DbSet<Status> Statuses { get; set; }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Status>().HasData(
-                new {StatusId = 1 , StatusName = "Создана"},
-                new { StatusId = 2, StatusName = "В работе" },
-                new { StatusId = 3, StatusName = "Завершена" }
-                );
+                new Status[] {
+                new Status { StatusId = 0, StatusName = "Создана" },
+                new Status { StatusId = 1, StatusName = "В работе" },
+                new Status { StatusId = 2, StatusName = "Завершена" }
+                });
         }
+
     }
 }
