@@ -12,33 +12,30 @@ namespace TestSoftline.Repository
         {
             _context = context;
         }
-        public async Task<Tasks> Add(Tasks task)
+        public async Task<Tasks> AddAsync(Tasks task)
         {
             await _context.Tasks.AddAsync(task);
             await _context.SaveChangesAsync();
             return task;
         }
 
-        public async Task Delete(int[] tasks)
+        public async Task DeleteAsync(int[] tasks)
         {
-            //foreach (var id in tasks)
-            //{
-            //    var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
-            //    _context.Tasks.Remove(existingTask);
-            //}
-            //await _context.SaveChangesAsync();
-
             foreach (var task in tasks)
             {
-                var record = new Tasks { TasksId = task };
+                var record = new Tasks 
+                { 
+                    TasksId = task,
+                    IsDeleted = true
+                };
 
                 _context.Attach(record);
-                _context.Entry(record).State = EntityState.Deleted;
+                _context.Entry(record).Property(x => x.IsDeleted).IsModified = true;
             }
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<TaskViewModel>> GetAll()
+        public async Task<List<TaskViewModel>> GetAllAsync()
         {
             var query = from t in _context.Tasks
                         join s in _context.Statuses on t.StatusId equals s.StatusId
@@ -47,16 +44,14 @@ namespace TestSoftline.Repository
                             Id = t.TasksId,
                             TaskName = t.TaskName,
                             TaskDescription = t.Description,
-                            StatusName = s.StatusName
+                            StatusName = s.StatusName,
+                            IsDeleted = t.IsDeleted
                         };
             return await query.ToListAsync();
         }
 
-        public async Task<bool> Update(Tasks task)
+        public async Task<bool> UpdateAsync(Tasks task)
         {
-            //_context.Tasks.Update(task);
-            //await _context.SaveChangesAsync();
-            //return task;
             var item = new Tasks
             {
                 TasksId = task.TasksId,
@@ -79,6 +74,6 @@ namespace TestSoftline.Repository
 
             return true;
         }
-        public async Task<Tasks> Get(int id) => await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
+        public async Task<Tasks> GetAsync(int id) => await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
     }
 }

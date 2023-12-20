@@ -15,8 +15,10 @@
 
         foreach (var item in Model)
         {
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="card" style="padding: 0;">
+            if (item.IsDeleted == false)
+            {
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="card" style="padding: 0;">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-auto">
@@ -40,6 +42,7 @@
                     </div>
                 </div>
             </div>
+            }
         }
     }
 </div>
