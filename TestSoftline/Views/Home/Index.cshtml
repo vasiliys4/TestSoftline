@@ -1,4 +1,4 @@
-﻿@model List<TestSoftline.Models.Tasks>;
+﻿@model List<TestSoftline.Models.TaskViewModel>;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -20,23 +20,23 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-auto">
-                                <input type="checkbox" name="tasks" value="@item.TasksId" style="text-align: right;" />
+                                <input type="checkbox" name="tasks" value="@item.Id" style="text-align: right;" />
                             </div>
                             <div class="col">
                                 <h5 class="card-title">
-                                    <a class="text-dark" asp-controller="Home" asp-route-id="@item.TasksId">@item.TaskName</a>
+                                    <a class="text-dark" asp-controller="Home" asp-route-id="@item.Id">@item.TaskName</a>
                                 </h5>
                             </div>
                             <div class="col-md-auto">
-                                <a asp-controller="Home" asp-action="UpdateTask" asp-route-id="@item.TasksId" style="text-align: right;">Изменить</a>
+                                <a asp-controller="Home" asp-action="UpdateTask" asp-route-id="@item.Id" style="text-align: right;">Изменить</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">@item.Description</p>
+                        <p class="card-text">@item.TaskDescription</p>
                     </div>
                     <div>
-                        <p class="card-text">@item.Status</p>
+                        <p class="card-text">@item.StatusName</p>
                     </div>
                 </div>
             </div>

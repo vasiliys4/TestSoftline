@@ -21,25 +21,63 @@ namespace TestSoftline.Repository
 
         public async Task Delete(int[] tasks)
         {
-            foreach (var id in tasks)
+            //foreach (var id in tasks)
+            //{
+            //    var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
+            //    _context.Tasks.Remove(existingTask);
+            //}
+            //await _context.SaveChangesAsync();
+
+            foreach (var task in tasks)
             {
-                var existingTask = await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
-                _context.Tasks.Remove(existingTask);
+                var record = new Tasks { TasksId = task };
+
+                _context.Attach(record);
+                _context.Entry(record).State = EntityState.Deleted;
             }
             await _context.SaveChangesAsync();
-
         }
 
-        public async Task<List<Tasks>> GetAll()
+        public async Task<List<TaskViewModel>> GetAll()
         {
-            return await _context.Tasks.Include(t => t.Status).ToListAsync();
+            var query = from t in _context.Tasks
+                        join s in _context.Statuses on t.StatusId equals s.StatusId
+                        select new TaskViewModel
+                        {
+                            Id = t.TasksId,
+                            TaskName = t.TaskName,
+                            TaskDescription = t.Description,
+                            StatusName = s.StatusName
+                        };
+            return await query.ToListAsync();
         }
 
-        public async Task<Tasks> Update(Tasks task)
+        public async Task<bool> Update(Tasks task)
         {
-            _context.Tasks.Update(task);
+            //_context.Tasks.Update(task);
+            //await _context.SaveChangesAsync();
+            //return task;
+            var item = new Tasks
+            {
+                TasksId = task.TasksId,
+                TaskName = task.TaskName,
+                Description = task.Description,
+                StatusId = task.StatusId
+            };
+
+            if (!await _context.Tasks.AnyAsync(x => x.TasksId == item.TasksId))
+            {
+                return false;
+            }
+
+            _context.Tasks.Attach(item);
+            _context.Entry(item).Property(x => x.TaskName).IsModified = true;
+            _context.Entry(item).Property(x => x.Description).IsModified = true;
+            _context.Entry(item).Property(x => x.StatusId).IsModified = true;
+
             await _context.SaveChangesAsync();
-            return task;
+
+            return true;
         }
         public async Task<Tasks> Get(int id) => await _context.Tasks.FirstOrDefaultAsync(t => t.TasksId == id);
     }

@@ -30,6 +30,10 @@ namespace TestSoftline.Controllers
         [HttpPost]
         public async Task<IActionResult> AddTask(Tasks task)
         {
+            if (task == null)
+            {
+                return BadRequest("null");
+            }
             await taskRepository.Add(task);
             return RedirectToAction("Index");
         }
